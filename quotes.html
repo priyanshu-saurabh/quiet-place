@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Whisper Something</title>
+
   <style>
     body {
       font-family: "Inter", sans-serif;
@@ -61,13 +62,17 @@
       width: 100%;
       padding: 0.75rem;
       margin-bottom: 1.5rem;
-      border: none;
       border-radius: 6px;
       font-size: 1rem;
       background: #0e0e0e;
       color: #f1f1f1;
-      outline: none;
       border: 1px solid #333;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 0.4rem;
+      background: #141414;
     }
 
     button {
@@ -102,7 +107,9 @@
     }
   </style>
 </head>
+
 <body>
+
   <!-- Header -->
   <header>
     <a href="index.html">← Back</a>
@@ -112,10 +119,13 @@
 
   <!-- Form -->
   <div class="container">
-    <form id="whisper-form" 
-          action="https://script.google.com/macros/s/AKfycbyfdQQsnLGupu8zusNHPSk5eSgQkzgW_2gC_s3dNOugDYKp4mdh5i0o3E02rrV-yK_bPQ/exec" 
-          method="POST" target="hidden_iframe" onsubmit="submitted=true;">
-      
+
+    <form id="whisper-form"
+          action="https://script.google.com/macros/s/AKfycbyK0vP3RzuO9fw6dQtkiMV8S6TwALQZXVk1jgfOjHD833JE5pO0F817b9CI6zXs062vHQ/exec"
+          method="POST"
+          enctype="multipart/form-data"
+          target="hidden_iframe">
+
       <label for="name">Name (optional)</label>
       <input type="text" id="name" name="name" placeholder="Anonymous">
 
@@ -123,11 +133,20 @@
       <input type="email" id="email" name="email" placeholder="you@example.com">
 
       <label for="message">Your Whisper</label>
-      <textarea id="message" name="message" rows="4" placeholder="Write something..." required></textarea>
+      <textarea id="message" name="message" rows="4"
+        placeholder="Write something..." required></textarea>
+
+      <label for="image">Add Image (optional)</label>
+      <input type="file" id="image" name="image" accept="image/*">
 
       <button type="submit">Send</button>
+
     </form>
-    <div class="success-message" id="success-msg">✨ Whisper sent!</div>
+
+    <div class="success-message" id="success-msg">
+      ✨ Whisper sent!
+    </div>
+
   </div>
 
   <iframe name="hidden_iframe" style="display:none;"></iframe>
@@ -137,23 +156,96 @@
     ✦ Quiet Place · 2026
   </footer>
 
-  <!-- Script -->
+  <!-- Script 
   <script>
-    let submitted = false;
-    document.getElementById("whisper-form").addEventListener("submit", () => {
-      setTimeout(() => {
-        if (submitted) {
-          document.getElementById("success-msg").style.display = "block";
-          document.getElementById("whisper-form").reset();
-          submitted = false;
-        }
-      }, 1200);
-    });
+   const form = document.getElementById("whisper-form");
+const successMsg = document.getElementById("success-msg");
+const imageInput = document.getElementById("image");
+
+// create hidden input to send base64
+const hiddenImageField = document.createElement("input");
+hiddenImageField.type = "hidden";
+hiddenImageField.name = "imageBase64";
+form.appendChild(hiddenImageField);
+
+form.addEventListener("submit", function () {
+
+  const file = imageInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      hiddenImageField.value = reader.result;
+      form.submit(); // submit after base64 ready
+    };
+
+    reader.readAsDataURL(file);
+
+  } else {
+    // no image → normal submit
+    form.submit();
+  }
+
+  setTimeout(() => {
+    successMsg.style.display = "block";
+    form.reset();
+    hiddenImageField.value = "";
+  }, 1500);
+});
+
   </script>
+-->
+<script>
+const form = document.getElementById("whisper-form");
+const successMsg = document.getElementById("success-msg");
+const imageInput = document.getElementById("image");
+
+const CLOUD_NAME = "dnebau7uk";
+const UPLOAD_PRESET = "Whisper";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzCpXCwTOq62a5YPVwetR5FoixwEBldo7Ip8khLzaFbiWccGoJ5HmBFFYagtFel-SYLw/exec";
+
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  let imageUrl = "";
+
+  const file = imageInput.files[0];
+
+  // 🔹 Upload image to Cloudinary first
+  if (file) {
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await response.json();
+    imageUrl = data.secure_url;
+  }
+
+  // 🔹 Now send text + image URL to Apps Script
+  const finalData = new FormData();
+  finalData.append("name", form.name.value);
+  finalData.append("email", form.email.value);
+  finalData.append("message", form.message.value);
+  finalData.append("imageUrl", imageUrl);
+
+  await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    body: finalData
+  });
+
+  successMsg.style.display = "block";
+  form.reset();
+});
+</script>
 </body>
 </html>
-
-
-
-
-
