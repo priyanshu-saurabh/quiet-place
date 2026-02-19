@@ -2,6 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" 
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Quiet Place</title>
@@ -54,6 +57,55 @@
         background: rgba(0,0,0,0.5);
         z-index: 1;
       }
+   #about-space {
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 80px;
+}
+
+#about-space h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  letter-spacing: 1px;
+}
+
+#ritual-text {
+  font-size: 1.15rem;
+  line-height: 1.9;
+  min-height: 140px;
+}
+
+.space-card {
+  padding: 30px 25px;
+  border-radius: 14px;
+  transition: all 0.4s ease;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+}
+
+.space-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255,255,255,0.07);
+}
+
+.share-ritual-btn {
+  display: inline-block;
+  margin-top: 40px;
+  padding: 14px 36px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  transition: all 0.4s ease;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+}
+
+.share-ritual-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255,255,255,0.18);
+}
+
     </style>
 
 
@@ -125,83 +177,107 @@
       </div>      
     </section>
 
-  <section id="reflections" class="tm-section-pad-top">
+<!-- <section id="art-wall" class="tm-section-pad-top">
   <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        
+        <h2 class="tm-text-primary mb-4 tm-section-title">
+          A Shared Art Wall
+        </h2>
 
-    <!-- Title row -->
-    <div class="row tm-content-box">
-      <div class="col-lg-12 col-xl-12">
-        <div class="tm-intro-text-container text-center">
-          <h2 class="tm-text-primary mb-4 tm-section-title">Reflections</h2>
-          <p class="mb-4 tm-intro-text">
-            Fragments of thought, quiet pauses, and moments worth revisiting.
-            A glimpse below — full reflections live <strong>beyond</strong>.
-          </p>
-        </div>
+        <p class="mx-auto tm-section-desc" style="max-width: 750px; font-size: 1.1rem; line-height: 1.7;">
+          Think of this as a shared art wall. <br><br>
+          Your images become part of the 
+          <a href="gallery.html" style="text-decoration: underline;">Gallery</a>. <br>
+          Your words become part of our 
+          <a href="reflections.html" style="text-decoration: underline;">Reflections</a>.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section> -->
+
+   <section id="about-space" class="tm-section-pad-top">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+
+        <h2 class="tm-text-primary mb-4 tm-section-title">
+          What Is Quiet Place?
+        </h2>
+
+        <!-- Typewriter Text Appears Here -->
+        <p id="ritual-text" class="mx-auto" style="max-width: 850px;"></p>
+
       </div>
     </div>
 
-    <!-- First row of reflections -->
-    <div class="row tm-content-box">
-      <div class="col-lg-1">
-        <i class="far fa-3x fa-moon text-center tm-icon"></i>
+    <div class="row mt-5 text-center">
+
+      <div class="col-md-4">
+        <div class="space-card">
+          <div class="space-icon"></div>
+          <h5 class="tm-text-primary mb-3">Share</h5>
+          <p>Leave an image, memory, or reflection that mattered to you.</p>
+        </div>
       </div>
-      <div class="col-lg-5">
-        <div class="tm-intro-text-container">
-          <h2 class="tm-text-primary mb-4">Quiet Night</h2>
-          <p class="mb-4 tm-intro-text">
-            “Silence also speaks.”  
+
+      <div class="col-md-4">
+        <div class="space-card">
+          <div class="space-icon"></div>
+          <h5 class="tm-text-primary mb-3">It Lives Here</h5>
+          <p>Your submission gently becomes part of the 
+            <a href="gallery.html">Gallery</a> or 
+            <a href="reflections.html">Reflections</a>.
           </p>
         </div>
       </div>
 
-      <div class="col-lg-1">
-        <i class="fas fa-3x fa-water text-center tm-icon"></i>
-      </div>
-      <div class="col-lg-5">
-        <div class="tm-intro-text-container">
-          <h2 class="tm-text-primary mb-4">Flow</h2>
-          <p class="mb-4 tm-intro-text">
-            “Drifting is part of arriving.”  
-          </p>
+      <div class="col-md-4">
+        <div class="space-card">
+          <div class="space-icon"></div>
+          <h5 class="tm-text-primary mb-3">Others Discover</h5>
+          <p>Someone, somewhere, may pause and find meaning in what you shared.</p>
         </div>
       </div>
+
     </div>
 
-    <!-- Second row of reflections -->
-    <div class="row tm-content-box">
-      <div class="col-lg-1">
-        <i class="fas fa-3x fa-cloud text-center tm-icon"></i>
-      </div>
-      <div class="col-lg-5">
-        <div class="tm-intro-text-container">
-          <h2 class="tm-text-primary mb-4">Clouds</h2>
-          <p class="mb-4 tm-intro-text">
-            “Sometimes, the pause is the message.”
-          </p>
-        </div>
-      </div>
+    <div class="row mt-5">
+      <div class="col-lg-12 text-center">
+        <p style="opacity:0.7; font-size:0.95rem;">
+          <!-- Submissions are reviewed gently before becoming part of the space. -->
+        </p>
 
-      <div class="col-lg-1">
-        <i class="fas fa-3x fa-book-open text-center tm-icon"></i>
-      </div>
-      <div class="col-lg-5">
-        <div class="tm-intro-text-container">
-          <h2 class="tm-text-primary mb-4">Pages</h2>
-          <p class="mb-4 tm-intro-text">
-            “A warm light in the distance.”  
-          </p>
-          <div class="tm-continue">
-            <a href="reflections.html" class="tm-intro-text tm-btn-primary">Read More →</a>
-          </div>
-        </div>
+        <a href="quotes.html" class="share-ritual-btn">
+          Begin Your Offering
+        </a>
       </div>
     </div>
 
   </div>
 </section>
 
-    
+  </div>
+</section>
+
+   
+
+    <!-- Soft Moderation Note -->
+    <!-- <div class="row mt-5">
+      <div class="col-lg-12 text-center">
+        <p style="opacity: 0.7; font-size: 0.95rem;">
+          Submissions are reviewed gently before becoming part of the space.
+        </p>
+      </div>
+    </div>
+
+  </div> -->
+</section>
+
+
  <section id="moods" class="tm-section-pad-top tm-parallax-2" style="position:relative; overflow:hidden;">
   <!-- Background video -->
   <video autoplay muted loop playsinline id="bg-video-moods"
@@ -289,7 +365,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-01.jpg" alt="Image 1" class="img-fluid">
                           <figcaption>
-                            <h2><i>Yo! <span>❄️</span></i></h2>
+                            <h2><i>Physical Health <span>Exercise!</span></i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -297,7 +373,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-02.jpg" alt="Image 2" class="img-fluid">
                           <figcaption>
-                            <h2><i>Nature <span>🌱</span></i></h2>
+                            <h2><i>Rain on Glass <span>Second Image</span></i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -305,7 +381,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-03.jpg" alt="Image 3" class="img-fluid">
                           <figcaption>
-                            <h2><i><span>Sea View</span> 🍁</i></h2>
+                            <h2><i><span>Sea View</span> Mega City</i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -313,7 +389,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-04.jpg" alt="Image 4" class="img-fluid">
                           <figcaption>
-                            <h2><i>Dream Girl <span>🔥</span></i></h2>
+                            <h2><i>Dream Girl <span>Thoughts</span></i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -321,7 +397,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-05.jpg" alt="Image 5" class="img-fluid">
                           <figcaption>
-                            <h2><i><span>Peace</span> 🧩</i></h2>
+                            <h2><i><span>Workstation</span> Offices</i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -329,7 +405,7 @@
                         <figure class="effect-honey tm-gallery-item">
                           <img src="img/gallery-tn-06.jpg" alt="Image 6" class="img-fluid">
                           <figcaption>
-                            <h2><i>Above <span>❤️</span></i></h2>
+                            <h2><i>Just Above <span>The City</span></i></h2>
                           </figcaption>
                         </figure>
                       </a>
@@ -379,7 +455,7 @@
 
 <footer class="custom-footer text-center mt-5">
   <div class="container">
-    <p class="footer-main mb-1">&copy; ✦ Quiet Place · 2026 ✦ All rights reserved.</p>
+    <p class="footer-main mb-1">&copy; ✦ Quiet Place · 2025 ✦ All rights reserved.</p>
     
   
   </div>
@@ -415,6 +491,40 @@
         }
         typeWriter();
       });
+
+      document.addEventListener("DOMContentLoaded", function() {
+  const ritualText = 
+  "Quiet Place is a shared art wall and a quiet archive of human moments.\n" +
+  "A space where you may remain anonymous, share something meaningful, " +
+  "and let it live gently in public.\n" +
+  "This is a community of quiet minds — not loud feeds.";
+
+  let i = 0;
+  let speed = 65;
+  const el = document.getElementById("ritual-text");
+
+  function typeEffect() {
+    if (i < ritualText.length) {
+      if (ritualText.charAt(i) === "\n") {
+        el.innerHTML += "<br><br>";
+      } else {
+        el.innerHTML += ritualText.charAt(i);
+      }
+      i++;
+      setTimeout(typeEffect, speed);
+    }
+  }
+
+  // Trigger when section scrolls into view
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      typeEffect();
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(el);
+});
     </script>
 
     <!-- Floating stars/particles background -->
@@ -852,5 +962,3 @@
     </script>
   </body>
 </html>
-
-
