@@ -5,10 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reflections – Quiet Place</title>
+
   <style>
     body {
       font-family: "Inter", sans-serif;
-      background: #0e0e0e;
+      background: #0e0e1a;
       color: #f1f1f1;
       margin: 0;
       padding: 0;
@@ -43,6 +44,8 @@
       max-width: 700px;
       margin: 3rem auto;
       padding: 0 1rem;
+      position: relative;
+      z-index: 2;
     }
 
     .reflection {
@@ -55,529 +58,123 @@
       border-radius: 4px;
     }
 
+    #anonymous-wall {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:2.5em;
+      font-size:1.1rem;
+      color:#b6e0ff;
+      opacity:0.85;
+      margin: 2.5rem 0 0 0;
+      position: relative;
+      z-index: 2;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;
       font-size: 0.85rem;
       color: #aaa;
       border-top: 1px solid #222;
-    }
-
-    @media (max-width: 600px) {
-      .reflection {
-        font-size: 1rem;
-        padding: 1rem;
-      }
-    }
-
-    #anonymous-wall {
-      transition: opacity 1s ease;
+      position: relative;
+      z-index: 2;
     }
   </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <header>
-    <a href="#" id="back-btn">← Back</a>
-    <span>Reflections</span>
-    <div></div>
-  </header>
 
-  <!-- Reflections List -->
-  <div class="reflection-container">
-    <div class="reflection">“Silence also speaks.”</div>
-    <div class="reflection">“Not everything needs an answer.”</div>
-    <div class="reflection">“Drifting is part of arriving.”</div>
-    <div class="reflection">“The rain doesn’t ask if you’re listening.”</div>
-    <div class="reflection">“Sometimes, the pause is the message.”</div>
-  </div>
+<header>
+  <a href="#" id="back-btn">← Back</a>
+  <span>Reflections</span>
+  <div></div>
+</header>
 
+<div class="reflection-container">
+  <div class="reflection">“Silence also speaks.”</div>
+  <div class="reflection">“Not everything needs an answer.”</div>
+  <div class="reflection">“Drifting is part of arriving.”</div>
+  <div class="reflection">“The rain doesn’t ask if you’re listening.”</div>
+  <div class="reflection">“Sometimes, the pause is the message.”</div>
+</div>
 
-  
-  <!-- Anonymous Wall -->
-  <div id="anonymous-wall" style="display:flex; justify-content:center; align-items:center; min-height:2.5em; font-size:1.1rem; color:#b6e0ff; opacity:0.85; margin: 2.5rem 0 0 0;">
-    <span id="wall-message"></span>
-  </div>
+<div id="anonymous-wall">
+  <span id="wall-message"></span>
+</div>
 
-  <!-- Footer -->
-  <!-- Mood Canvases and Selector (above footer) -->
-  <canvas id="stars-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0;"></canvas>
-  <canvas id="fire-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; display:none;"></canvas>
-  <canvas id="snow-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; display:none;"></canvas>
-  <canvas id="blossom-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; display:none;"></canvas>
-  <div id="mood-selector" style="margin: 2rem 0 1.5rem 0; display: flex; justify-content: center; gap: 1.5rem; font-size: 2.2rem; position:relative; z-index:2;">
-    <button class="mood-btn" data-mood="night" title="Night" style="background:none;border:none;cursor:pointer;outline:none;">🌙</button>
-    <button class="mood-btn" data-mood="fire" title="Fire" style="background:none;border:none;cursor:pointer;outline:none;">🔥</button>
-    <button class="mood-btn" data-mood="snow" title="Snow" style="background:none;border:none;cursor:pointer;outline:none;">❄️</button>
-    <button class="mood-btn" data-mood="blossom" title="Blossom" style="background:none;border:none;cursor:pointer;outline:none;">🌸</button>
-  </div>
-  <footer>
-    ✦ Quiet Place · 2026
-  </footer>
-  <script>
-    // --- MOOD PARTICLE BACKGROUNDS ---
-    const starsCanvas = document.getElementById('stars-bg');
-    const fireCanvas = document.getElementById('fire-bg');
-    const snowCanvas = document.getElementById('snow-bg');
-    const blossomCanvas = document.getElementById('blossom-bg');
-    function resizeAllCanvases() {
-      [starsCanvas, fireCanvas, snowCanvas, blossomCanvas].forEach(c => {
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-      });
-    }
-    resizeAllCanvases();
-    window.addEventListener('resize', resizeAllCanvases);
-    // --- STARS (NIGHT) ---
-    let w = window.innerWidth;
-    let h = window.innerHeight;
-    let STAR_COUNT = 90;
-    let stars = [];
-    function initStars() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      stars = [];
-      for (let i = 0; i < STAR_COUNT; i++) {
-        stars.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.2 + 0.5,
-          dx: (Math.random() - 0.5) * 0.2,
-          dy: (Math.random() - 0.5) * 0.2,
-          twinkle: Math.random() * Math.PI * 2
-        });
-      }
-    }
-    initStars();
-    window.addEventListener('resize', initStars);
-    function animateStars() {
-      const ctx = starsCanvas.getContext('2d');
-      ctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-      for (let s of stars) {
-        s.x += s.dx;
-        s.y += s.dy;
-        if (s.x < 0) s.x = w;
-        if (s.x > w) s.x = 0;
-        if (s.y < 0) s.y = h;
-        if (s.y > h) s.y = 0;
-        s.twinkle += 0.05;
-        let alpha = 0.7 + 0.3 * Math.sin(s.twinkle);
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-        ctx.shadowColor = '#fff';
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-      requestAnimationFrame(animateStars);
-    }
-    animateStars();
-    // Burst of stars on click
-    starsCanvas.addEventListener('click', function(e) {
-      const rect = starsCanvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const burstCount = 18 + Math.floor(Math.random() * 8);
-      for (let i = 0; i < burstCount; i++) {
-        const angle = (Math.PI * 2) * (i / burstCount);
-        const speed = 1.2 + Math.random() * 1.8;
-        stars.push({
-          x: x,
-          y: y,
-          r: Math.random() * 1.5 + 0.8,
-          dx: Math.cos(angle) * speed,
-          dy: Math.sin(angle) * speed,
-          twinkle: Math.random() * Math.PI * 2,
-          burstLife: 0
-        });
-      }
-    });
-    function cleanBurstStars() {
-      for (let i = stars.length - 1; i >= STAR_COUNT; i--) {
-        if (stars[i].burstLife !== undefined) {
-          stars[i].burstLife++;
-          if (stars[i].burstLife > 60) {
-            stars.splice(i, 1);
-          }
-        }
-      }
-      requestAnimationFrame(cleanBurstStars);
-    }
-    cleanBurstStars();
-    // --- FIRE ---
-    let fireParticles = [];
-    function initFire() {
-      fireParticles = [];
-      for (let i = 0; i < 60; i++) {
-        fireParticles.push({
-          x: Math.random() * fireCanvas.width,
-          y: fireCanvas.height - 10 - Math.random() * 40,
-          r: Math.random() * 2.2 + 1.2,
-          dx: (Math.random() - 0.5) * 0.5,
-          dy: -Math.random() * 1.5 - 0.5,
-          alpha: 0.7 + Math.random() * 0.3,
-          color: `rgba(${220+Math.floor(Math.random()*35)},${80+Math.floor(Math.random()*60)},0,`
-        });
-      }
-    }
-    function animateFire() {
-      const ctx = fireCanvas.getContext('2d');
-      ctx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
-      for (let p of fireParticles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + p.alpha + ")";
-        ctx.shadowColor = '#ffae42';
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        p.x += p.dx;
-        p.y += p.dy;
-        p.alpha -= 0.008 + Math.random() * 0.01;
-        if (p.alpha <= 0.1 || p.y < 0) {
-          p.x = Math.random() * fireCanvas.width;
-          p.y = fireCanvas.height - 10 - Math.random() * 40;
-          p.r = Math.random() * 2.2 + 1.2;
-          p.dx = (Math.random() - 0.5) * 0.5;
-          p.dy = -Math.random() * 1.5 - 0.5;
-          p.alpha = 0.7 + Math.random() * 0.3;
-        }
-      }
-      requestAnimationFrame(animateFire);
-    }
-    initFire();
-    animateFire();
-    fireCanvas.addEventListener('click', function(e) {
-      const rect = fireCanvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      for (let i = 0; i < 24; i++) {
-        const angle = (Math.PI * 2) * (i / 24);
-        const speed = 1.5 + Math.random() * 2.2;
-        fireParticles.push({
-          x: x,
-          y: y,
-          r: Math.random() * 2.2 + 1.2,
-          dx: Math.cos(angle) * speed,
-          dy: Math.sin(angle) * speed,
-          alpha: 1,
-          color: `rgba(${220+Math.floor(Math.random()*35)},${80+Math.floor(Math.random()*60)},0,`
-        });
-      }
-    });
-    // --- SNOW ---
-    function drawSVGFlake(ctx, x, y, r, alpha) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.scale(r / 12, r / 12);
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = '#e0f7fa';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        ctx.moveTo(0, 0);
-        ctx.lineTo(10, 0);
-        ctx.moveTo(7, 0);
-        ctx.lineTo(7.5, 2);
-        ctx.moveTo(7, 0);
-        ctx.lineTo(7.5, -2);
-        ctx.rotate(Math.PI / 3);
-      }
-      ctx.stroke();
-      ctx.globalAlpha = 1;
-      ctx.restore();
-    }
-    let snowflakes = [];
-    function initSnow() {
-      snowflakes = [];
-      for (let i = 0; i < 70; i++) {
-        const isSVG = Math.random() < 0.4;
-        snowflakes.push({
-          x: Math.random() * snowCanvas.width,
-          y: Math.random() * snowCanvas.height,
-          r: isSVG ? (Math.random() * 7 + 7) : (Math.random() * 2 + 1.5),
-          dx: (Math.random() - 0.5) * 0.5,
-          dy: 0.5 + Math.random() * 0.7,
-          alpha: 0.6 + Math.random() * 0.4,
-          isSVG
-        });
-      }
-    }
-    function animateSnow() {
-      const ctx = snowCanvas.getContext('2d');
-      ctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
-      for (let f of snowflakes) {
-        if (f.isSVG) {
-          drawSVGFlake(ctx, f.x, f.y, f.r, f.alpha);
-        } else {
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,255,255,${f.alpha})`;
-          ctx.shadowColor = '#e0f7fa';
-          ctx.shadowBlur = 12;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-        f.x += f.dx + Math.sin(f.y / 40) * 0.3;
-        f.y += f.dy;
-        if (f.x < 0) f.x = snowCanvas.width;
-        if (f.x > snowCanvas.width) f.x = 0;
-        if (f.y > snowCanvas.height) {
-          f.x = Math.random() * snowCanvas.width;
-          f.y = -5;
-        }
-      }
-      requestAnimationFrame(animateSnow);
-    }
-    initSnow();
-    animateSnow();
-    snowCanvas.addEventListener('click', function(e) {
-      const rect = snowCanvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      for (let i = 0; i < 18; i++) {
-        const angle = (Math.PI * 2) * (i / 18);
-        const speed = 0.7 + Math.random() * 1.2;
-        const isSVG = Math.random() < 0.4;
-        snowflakes.push({
-          x: x,
-          y: y,
-          r: isSVG ? (Math.random() * 7 + 7) : (Math.random() * 2 + 1.5),
-          dx: Math.cos(angle) * speed,
-          dy: Math.sin(angle) * speed,
-          alpha: 1,
-          isSVG,
-          burstLife: 0
-        });
-      }
-    });
-    // --- BLOSSOM ---
-    let petals = [];
-    function initBlossom() {
-      petals = [];
-      for (let i = 0; i < 40; i++) {
-        petals.push({
-          x: Math.random() * blossomCanvas.width,
-          y: Math.random() * blossomCanvas.height,
-          r: Math.random() * 8 + 6,
-          dx: (Math.random() - 0.5) * 0.7,
-          dy: 0.7 + Math.random() * 0.7,
-          rot: Math.random() * Math.PI * 2,
-          dRot: (Math.random() - 0.5) * 0.03,
-          alpha: 0.7 + Math.random() * 0.3
-        });
-      }
-    }
-    function drawPetal(ctx, x, y, r, rot, alpha) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(rot);
-      // Draw a five-petal blossom (🌸) with gradient and highlight
-      for (let i = 0; i < 5; i++) {
-        ctx.save();
-        ctx.rotate((Math.PI * 2 * i) / 5);
-        // Petal gradient: base darker, tip lighter
-        const grad = ctx.createLinearGradient(0, 0, r * 0.6, 0);
-        grad.addColorStop(0, `rgba(255,140,180,${alpha})`); // base
-        grad.addColorStop(0.7, `rgba(255,182,193,${alpha})`); // mid
-        grad.addColorStop(1, `rgba(255,220,235,${alpha})`); // tip
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(r * 0.18, -r * 0.6, r * 0.55, -r * 0.6, r * 0.6, 0);
-        ctx.bezierCurveTo(r * 0.55, r * 0.6, r * 0.18, r * 0.6, 0, 0);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.shadowColor = '#ffb6c1';
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        // Petal highlight
-        ctx.beginPath();
-        ctx.ellipse(r * 0.35, -r * 0.13, r * 0.13, r * 0.07, Math.PI / 8, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,0.18)`;
-        ctx.fill();
-        ctx.restore();
-      }
-      // Yellow center with soft glow
-      ctx.beginPath();
-      ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2);
-      const centerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, r * 0.18);
-      centerGrad.addColorStop(0, `rgba(255,221,77,${alpha})`);
-      centerGrad.addColorStop(1, `rgba(255,221,77,0.2)`);
-      ctx.fillStyle = centerGrad;
-      ctx.shadowColor = '#ffe066';
-      ctx.shadowBlur = 8;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.restore();
-    }
-    function animateBlossom() {
-      const ctx = blossomCanvas.getContext('2d');
-      ctx.clearRect(0, 0, blossomCanvas.width, blossomCanvas.height);
-      for (let p of petals) {
-        drawPetal(ctx, p.x, p.y, p.r, p.rot, p.alpha);
-        p.x += p.dx;
-        p.y += p.dy;
-        p.rot += p.dRot;
-        if (p.x < 0) p.x = blossomCanvas.width;
-        if (p.x > blossomCanvas.width) p.x = 0;
-        if (p.y > blossomCanvas.height) {
-          p.x = Math.random() * blossomCanvas.width;
-          p.y = -10;
-        }
-      }
-      requestAnimationFrame(animateBlossom);
-    }
-    initBlossom();
-    animateBlossom();
-    blossomCanvas.addEventListener('click', function(e) {
-      const rect = blossomCanvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      for (let i = 0; i < 16; i++) {
-        const angle = (Math.PI * 2) * (i / 16);
-        const speed = 0.8 + Math.random() * 1.2;
-        petals.push({
-          x: x,
-          y: y,
-          r: Math.random() * 8 + 6,
-          dx: Math.cos(angle) * speed,
-          dy: Math.sin(angle) * speed,
-          rot: Math.random() * Math.PI * 2,
-          dRot: (Math.random() - 0.5) * 0.03,
-          alpha: 1
-        });
-      }
-    });
-    // --- MOOD SELECTOR LOGIC ---
-    function setMood(mood) {
-      starsCanvas.style.display = 'none';
-      fireCanvas.style.display = 'none';
-      snowCanvas.style.display = 'none';
-      blossomCanvas.style.display = 'none';
-      if (mood === 'night') starsCanvas.style.display = '';
-      if (mood === 'fire') fireCanvas.style.display = '';
-      if (mood === 'snow') snowCanvas.style.display = '';
-      if (mood === 'blossom') blossomCanvas.style.display = '';
-      // Use a single color scheme for all moods
-      const root = document.documentElement;
-      const colors = {
-        '--main-bg': '#0e0e1a',
-        '--main-accent': '#b6e0ff',
-        '--main-text': '#f1f1f1',
-      };
-      for (const key in colors) {
-        root.style.setProperty(key, colors[key]);
-      }
-      document.body.style.background = colors['--main-bg'];
-      document.body.style.color = colors['--main-text'];
-    }
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        setMood(this.dataset.mood);
-      });
-    });
-    // Set default mood only once on page load
-    if (!window.__moodSet) {
-      setMood('night');
-      window.__moodSet = true;
-    }
-    // Back button logic
-    document.getElementById('back-btn').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.href = 'index.html';
-      }
-    });
-  </script>
+<footer>
+  ✦ Quiet Place · 2026
+</footer>
 
-  <!-- JSONP Loader -->
-  <script>
-    // Anonymous Wall fetch and fade
-    const wall = document.getElementById('anonymous-wall');
-    const wallMsg = wall.querySelector('.wall-message');
-    const SHEET_API = 'https://script.google.com/macros/s/AKfycbyfdQQsnLGupu8zusNHPSk5eSgQkzgW_2gC_s3dNOugDYKp4mdh5i0o3E02rrV-yK_bPQ/exec';
-    const fallback = [
-      '“Sometimes, the pause is the message.”',
-      '“You are not alone in your thoughts.”',
-      '“Every whisper matters.”',
-      '“Kindness echoes in silence.”',
-      '“A quiet word can change a day.”'
-    ];
-    function fadeWall(messages) {
-      let idx = 0;
+<script>
+// Back button
+document.getElementById('back-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = 'index.html';
+  }
+});
+</script>
 
-      function showNext() {
-        box.style.opacity = 0;
-        setTimeout(() => {
-          box.textContent = `"${data[idx % data.length].message}"`;
-          box.style.opacity = 1;
-          idx++;
-        }, 1000);
-        setTimeout(showNext, 6000);
-      }
+<script>
+// Whisper Fetch + Fade
 
-      showNext();
-    }
+const wallMsg = document.getElementById('wall-message');
 
-   // Anonymous Wall fetch and fade
-  const wall = document.getElementById('anonymous-wall');
-  const wallMsg = document.getElementById('wall-message');
+const SHEET_API = 'https://script.google.com/macros/s/AKfycbyK0vP3RzuO9fw6dQtkiMV8S6TwALQZXVk1jgfOjHD833JE5pO0F817b9CI6zXs062vHQ/exec';
 
-  const SHEET_API = 'https://script.google.com/macros/s/AKfycbyfdQQsnLGupu8zusNHPSk5eSgQkzgW_2gC_s3dNOugDYKp4mdh5i0o3E02rrV-yK_bPQ/exec';
+const fallback = [
+  '“Sometimes, the pause is the message.”',
+  '“You are not alone in your thoughts.”',
+  '“Every whisper matters.”',
+  '“Kindness echoes in silence.”',
+  '“A quiet word can change a day.”'
+];
 
-  const fallback = [
-    '“Sometimes, the pause is the message.”',
-    '“You are not alone in your thoughts.”',
-    '“Every whisper matters.”',
-    '“Kindness echoes in silence.”',
-    '“A quiet word can change a day.”'
-  ];
+function fadeWall(messages) {
+  let idx = 0;
 
-  function fadeWall(messages) {
-    let idx = 0;
-    function showNext() {
-      wallMsg.style.opacity = 0;
-      setTimeout(() => {
-        wallMsg.textContent = messages[idx];
-        wallMsg.style.transition = 'opacity 1.2s';
-        wallMsg.style.opacity = 1;
-        idx = (idx + 1) % messages.length;
-        setTimeout(() => {
-          wallMsg.style.opacity = 0;
-          setTimeout(showNext, 1200);
-        }, 3500);
-      }, 400);
-    }
-    showNext();
+  function showNext() {
+    wallMsg.style.opacity = 0;
+
+    setTimeout(() => {
+      wallMsg.textContent = messages[idx];
+      wallMsg.style.transition = 'opacity 1.2s ease';
+      wallMsg.style.opacity = 1;
+
+      idx = (idx + 1) % messages.length;
+
+      setTimeout(showNext, 4000);
+    }, 800);
   }
 
-  fetch(SHEET_API)
-    .then(r => r.json())
-    .then(data => {
-      let messages = (data || []).map(m => m.message || m).filter(Boolean);
-      if (messages.length === 0) {
-        messages = fallback;
-      } else {
-        
-        messages = messages.slice(-3).reverse().map(m => '“' + m + '”');
-      }
-      fadeWall(messages);
-    })
-    .catch(() => {
-      fadeWall(fallback);
-    });
-  </script>
+  showNext();
+}
 
-  
+fetch(SHEET_API)
+  .then(res => res.json())
+  .then(data => {
+
+    let messages = (data || [])
+      .map(item => item.message)
+      .filter(Boolean);
+
+    if (messages.length === 0) {
+      fadeWall(fallback);
+    } else {
+      messages = messages.slice(-3).reverse()
+        .map(m => `“${m}”`);
+      fadeWall(messages);
+    }
+
+  })
+  .catch(() => {
+    fadeWall(fallback);
+  });
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
