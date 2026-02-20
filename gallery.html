@@ -53,7 +53,7 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, opacity 0.4s ease;
     }
 
     .gallery-item:hover {
@@ -82,26 +82,47 @@
       border-top: 1px solid #222;
     }
 
-    /* Loading Spinner */
+    /* Loader */
     .loader-wrapper {
       grid-column: 1 / -1;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 4rem 0;
+      transition: opacity 0.5s ease;
     }
 
-    .loader {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #333;
-      border-top: 3px solid #b6e0ff;
+    .whisper-loader {
+      display: flex;
+      gap: 10px;
+    }
+
+    .whisper-loader span {
+      width: 10px;
+      height: 10px;
+      background: #b6e0ff;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      opacity: 0.4;
+      animation: pulse 1.4s infinite ease-in-out;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .whisper-loader span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .whisper-loader span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes pulse {
+      0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.3;
+      }
+      40% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
     }
 
     @media (max-width: 500px) {
@@ -122,12 +143,16 @@
 
 <div class="gallery-container" id="gallery">
 
-  <!-- Loading Spinner -->
+  <!-- Loader -->
   <div class="loader-wrapper" id="gallery-loader">
-    <div class="loader"></div>
+    <div class="whisper-loader">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 
-  <!-- Permanent System Images -->
+  <!-- Permanent Images -->
   <div class="gallery-item">
     <img src="img/gallery1.jpg" alt="Rain on Glass">
     <div class="caption">Rain on Glass</div>
@@ -155,8 +180,7 @@
 </footer>
 
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzCpXCwTOq62a5YPVwetR5FoixwEBldo7Ip8khLzaFbiWccGoJ5HmBFFYagtFel-SYLw/exec";
-
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyK0vP3RzuO9fw6dQtkiMV8S6TwALQZXVk1jgfOjHD833JE5pO0F817b9CI6zXs062vHQ/exec";
 
 const gallery = document.getElementById("gallery");
 const loader = document.getElementById("gallery-loader");
@@ -165,12 +189,13 @@ fetch(APPS_SCRIPT_URL)
   .then(res => res.json())
   .then(data => {
 
-    // Remove loader
-    loader.remove();
+    if (!data || data.length === 0) {
+      loader.remove();
+      return;
+    }
 
-    if (!data || data.length === 0) return;
+    const imagePromises = [];
 
-    // Show newest first
     data.reverse().forEach(item => {
 
       if (!item.image) return;
@@ -178,12 +203,29 @@ fetch(APPS_SCRIPT_URL)
       const card = document.createElement("div");
       card.className = "gallery-item";
 
-      card.innerHTML = `
-        <img src="${item.image}" alt="User Upload">
-        <div class="caption">${item.message || ""}</div>
-      `;
+      const img = new Image();
+      img.src = item.image;
+
+      const imgPromise = new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+
+      imagePromises.push(imgPromise);
+
+      card.appendChild(img);
+
+      const caption = document.createElement("div");
+      caption.className = "caption";
+      caption.textContent = item.message || "";
+      card.appendChild(caption);
 
       gallery.appendChild(card);
+    });
+
+    Promise.all(imagePromises).then(() => {
+      loader.style.opacity = "0";
+      setTimeout(() => loader.remove(), 500);
     });
 
   })
