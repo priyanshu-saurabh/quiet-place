@@ -53,6 +53,11 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-4px);
     }
 
     .gallery-item img {
@@ -77,6 +82,28 @@
       border-top: 1px solid #222;
     }
 
+    /* Loading Spinner */
+    .loader-wrapper {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem 0;
+    }
+
+    .loader {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #333;
+      border-top: 3px solid #b6e0ff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     @media (max-width: 500px) {
       .gallery-item img {
         height: 150px;
@@ -95,8 +122,12 @@
 
 <div class="gallery-container" id="gallery">
 
-  <!-- Permanent System Images -->
+  <!-- Loading Spinner -->
+  <div class="loader-wrapper" id="gallery-loader">
+    <div class="loader"></div>
+  </div>
 
+  <!-- Permanent System Images -->
   <div class="gallery-item">
     <img src="img/gallery1.jpg" alt="Rain on Glass">
     <div class="caption">Rain on Glass</div>
@@ -124,17 +155,22 @@
 </footer>
 
 <script>
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyK0vP3RzuO9fw6dQtkiMV8S6TwALQZXVk1jgfOjHD833JE5pO0F817b9CI6zXs062vHQ/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzCpXCwTOq62a5YPVwetR5FoixwEBldo7Ip8khLzaFbiWccGoJ5HmBFFYagtFel-SYLw/exec";
+
+
+const gallery = document.getElementById("gallery");
+const loader = document.getElementById("gallery-loader");
 
 fetch(APPS_SCRIPT_URL)
   .then(res => res.json())
   .then(data => {
 
-    const gallery = document.getElementById("gallery");
+    // Remove loader
+    loader.remove();
 
     if (!data || data.length === 0) return;
 
-    // show newest first
+    // Show newest first
     data.reverse().forEach(item => {
 
       if (!item.image) return;
@@ -151,7 +187,10 @@ fetch(APPS_SCRIPT_URL)
     });
 
   })
-  .catch(err => console.log("Gallery fetch error:", err));
+  .catch(err => {
+    loader.remove();
+    console.log("Gallery fetch error:", err);
+  });
 </script>
 
 </body>
